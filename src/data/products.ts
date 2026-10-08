@@ -139,6 +139,7 @@ export const products: Product[] = [
       img("photo-1592899677977-9c10ca588bbd"),
     ],
     inStock: true,
+    featured: true,
   },
   {
     id: "9",
