@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { Toaster } from "@/components/ui/Toaster";
 
 export function PageShell({ children }: { children: React.ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export function PageShell({ children }: { children: React.ReactNode }) {
       </Suspense>
       <main className="flex-1">{children}</main>
       <Footer />
+      <Toaster />
     </div>
   );
 }

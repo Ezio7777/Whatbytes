@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useCartCount } from "@/hooks/useCartCount";
 import { useUrlFilters } from "@/hooks/useUrlFilters";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
@@ -11,6 +12,7 @@ import { CartButton } from "./CartButton";
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { query, setQuery } = useUrlFilters();
+  const cartCount = useCartCount();
 
   // typing updates the URL after a short pause, URL changes flow back here
   const [value, setValue] = useState(query);
@@ -55,7 +57,7 @@ export function Header() {
         </div>
 
         <div className="justify-self-end md:col-start-3 md:row-start-1">
-          <CartButton />
+          <CartButton count={cartCount} />
         </div>
       </div>
     </header>

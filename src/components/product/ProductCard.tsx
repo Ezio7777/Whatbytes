@@ -6,6 +6,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/components/ui/AddToCartButton";
 import { Stars } from "@/components/ui/Stars";
+import { useAddToCart } from "@/hooks/useAddToCart";
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +15,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, priority }: ProductCardProps) {
   const href = `/product/${product.id}`;
+  const addToCart = useAddToCart();
 
   if (product.featured) {
     return (
@@ -50,7 +52,11 @@ export function ProductCard({ product, priority }: ProductCardProps) {
             <dd className="font-medium capitalize">{product.category}</dd>
           </dl>
           <div className="mt-auto flex justify-end pt-5">
-            <AddToCartButton size="lg" className="w-full sm:w-auto" />
+            <AddToCartButton
+              size="lg"
+              onAdd={() => addToCart(product)}
+              className="w-full sm:w-auto"
+            />
           </div>
         </div>
       </article>
@@ -82,7 +88,10 @@ export function ProductCard({ product, priority }: ProductCardProps) {
         <p className="mt-1 text-lg font-bold text-navy-ink">
           {formatPrice(product.price)}
         </p>
-        <AddToCartButton className="mt-3 w-full" />
+        <AddToCartButton
+          onAdd={() => addToCart(product)}
+          className="mt-3 w-full"
+        />
       </div>
     </article>
   );
