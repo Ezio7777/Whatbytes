@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useFilterStore } from "@/store/filterStore";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
 import { CartButton } from "./CartButton";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const query = useFilterStore((s) => s.query);
+  const setQuery = useFilterStore((s) => s.setQuery);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -29,7 +32,7 @@ export function Header() {
         </div>
 
         <div className="col-span-2 row-start-2 md:col-span-1 md:col-start-2 md:row-start-1">
-          <SearchBar />
+          <SearchBar value={query} onChange={setQuery} />
         </div>
 
         <div className="justify-self-end md:col-start-3 md:row-start-1">
