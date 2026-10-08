@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PageShell } from "@/components/layout/PageShell";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,7 +31,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="min-h-screen font-sans">{children}</body>
+      <body className="min-h-screen font-sans">
+        <PageShell>{children}</PageShell>
+      </body>
     </html>
   );
 }
