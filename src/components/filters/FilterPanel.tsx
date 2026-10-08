@@ -1,29 +1,12 @@
 "use client";
 
 import { RotateCcw } from "lucide-react";
-import { DEFAULT_PRICE_RANGE, useFilterStore } from "@/store/filterStore";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 import { CategoryFilter } from "./CategoryFilter";
 import { PriceRangeSlider } from "./PriceRangeSlider";
 
-export function useActiveFilterCount() {
-  const category = useFilterStore((s) => s.category);
-  const priceRange = useFilterStore((s) => s.priceRange);
-  const query = useFilterStore((s) => s.query);
-
-  let count = 0;
-  if (category !== "all") count += 1;
-  if (
-    priceRange[0] !== DEFAULT_PRICE_RANGE[0] ||
-    priceRange[1] !== DEFAULT_PRICE_RANGE[1]
-  )
-    count += 1;
-  if (query.trim()) count += 1;
-  return count;
-}
-
 export function FilterPanel() {
-  const reset = useFilterStore((s) => s.reset);
-  const activeCount = useActiveFilterCount();
+  const { reset, activeCount } = useUrlFilters();
 
   return (
     <div className="rounded-card bg-brand p-5 text-white shadow-card">

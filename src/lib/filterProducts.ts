@@ -1,3 +1,4 @@
+import type { SortKey } from "@/lib/filterParams";
 import type { Category, Product } from "@/types/product";
 
 export interface ProductFilters {
@@ -24,4 +25,19 @@ export function filterProducts(products: Product[], filters: ProductFilters) {
     }
     return true;
   });
+}
+
+export function sortProducts(products: Product[], sort: SortKey) {
+  if (sort === "featured") return products;
+  const list = [...products];
+  switch (sort) {
+    case "price-asc":
+      return list.sort((a, b) => a.price - b.price);
+    case "price-desc":
+      return list.sort((a, b) => b.price - a.price);
+    case "rating":
+      return list.sort((a, b) => b.rating - a.rating);
+    default:
+      return list;
+  }
 }

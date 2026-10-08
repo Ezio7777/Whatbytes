@@ -4,11 +4,12 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FilterPanel, useActiveFilterCount } from "./FilterPanel";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
+import { FilterPanel } from "./FilterPanel";
 
 export function FilterSidebar() {
   const [open, setOpen] = useState(false);
-  const activeCount = useActiveFilterCount();
+  const { activeCount } = useUrlFilters();
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { ProductImage } from "@/components/ui/ProductImage";
 import Link from "next/link";
 import { cn, formatPrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
@@ -22,7 +22,7 @@ export function ProductCard({ product, priority }: ProductCardProps) {
           href={href}
           className="relative block aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg bg-brand-soft sm:aspect-auto sm:min-h-[260px] sm:w-[42%]"
         >
-          <Image
+          <ProductImage
             src={product.image}
             alt={product.title}
             fill
@@ -63,7 +63,7 @@ export function ProductCard({ product, priority }: ProductCardProps) {
         href={href}
         className="relative block aspect-[4/3] w-full overflow-hidden rounded-lg bg-brand-soft"
       >
-        <Image
+        <ProductImage
           src={product.image}
           alt={product.title}
           fill

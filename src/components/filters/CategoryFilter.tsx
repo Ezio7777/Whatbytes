@@ -2,12 +2,11 @@
 
 import { useId } from "react";
 import { CATEGORY_OPTIONS } from "@/lib/constants";
-import { useFilterStore } from "@/store/filterStore";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 
 export function CategoryFilter() {
   const name = useId();
-  const category = useFilterStore((s) => s.category);
-  const setCategory = useFilterStore((s) => s.setCategory);
+  const { category, setCategory } = useUrlFilters();
 
   return (
     <fieldset>

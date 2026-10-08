@@ -1,15 +1,37 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { PRICE_MAX, PRICE_MIN } from "@/lib/constants";
-import { useFilterStore } from "@/store/filterStore";
+import type { PriceRange } from "@/lib/filterParams";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 
 const STEP = 10;
+const key = (r: PriceRange) => `${r[0]}-${r[1]}`;
 
 export function PriceRangeSlider() {
-  const priceRange = useFilterStore((s) => s.priceRange);
-  const setPriceRange = useFilterStore((s) => s.setPriceRange);
-  const [min, max] = priceRange;
+  const { priceRange, setPriceRange } = useUrlFilters();
 
+  // local draft keeps dragging smooth, the URL is updated after a short pause
+  const [draft, setDraft] = useState<PriceRange>(priceRange);
+  const committed = useRef(key(priceRange));
+  const debounced = useDebounce(draft, 250);
+
+  useEffect(() => {
+    if (key(priceRange) !== committed.current) {
+      committed.current = key(priceRange);
+      setDraft(priceRange);
+    }
+  }, [priceRange]);
+
+  useEffect(() => {
+    if (key(debounced) !== committed.current && key(debounced) === key(draft)) {
+      committed.current = key(debounced);
+      setPriceRange(debounced);
+    }
+  }, [debounced, draft, setPriceRange]);
+
+  const [min, max] = draft;
   const span = PRICE_MAX - PRICE_MIN;
   const left = ((min - PRICE_MIN) / span) * 100;
   const right = ((max - PRICE_MIN) / span) * 100;
@@ -32,7 +54,7 @@ export function PriceRangeSlider() {
           step={STEP}
           value={min}
           onChange={(e) =>
-            setPriceRange([Math.min(Number(e.target.value), max - STEP), max])
+            setDraft([Math.min(Number(e.target.value), max - STEP), max])
           }
           style={{ zIndex: min > PRICE_MAX - 100 ? 5 : 3 }}
         />
@@ -44,7 +66,7 @@ export function PriceRangeSlider() {
           step={STEP}
           value={max}
           onChange={(e) =>
-            setPriceRange([min, Math.max(Number(e.target.value), min + STEP)])
+            setDraft([min, Math.max(Number(e.target.value), min + STEP)])
           }
           style={{ zIndex: 4 }}
         />

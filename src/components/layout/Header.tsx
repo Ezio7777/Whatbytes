@@ -1,16 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useFilterStore } from "@/store/filterStore";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useUrlFilters } from "@/hooks/useUrlFilters";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
 import { CartButton } from "./CartButton";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const query = useFilterStore((s) => s.query);
-  const setQuery = useFilterStore((s) => s.setQuery);
+  const { query, setQuery } = useUrlFilters();
+
+  // typing updates the URL after a short pause, URL changes flow back here
+  const [value, setValue] = useState(query);
+  const lastPushed = useRef(query);
+  const debounced = useDebounce(value, 300);
+
+  useEffect(() => {
+    if (debounced === value && debounced !== query) {
+      lastPushed.current = debounced;
+      setQuery(debounced);
+    }
+  }, [debounced, value, query, setQuery]);
+
+  useEffect(() => {
+    if (query !== lastPushed.current) {
+      lastPushed.current = query;
+      setValue(query);
+    }
+  }, [query]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -32,7 +51,7 @@ export function Header() {
         </div>
 
         <div className="col-span-2 row-start-2 md:col-span-1 md:col-start-2 md:row-start-1">
-          <SearchBar value={query} onChange={setQuery} />
+          <SearchBar value={value} onChange={setValue} />
         </div>
 
         <div className="justify-self-end md:col-start-3 md:row-start-1">
