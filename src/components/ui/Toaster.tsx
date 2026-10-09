@@ -3,19 +3,22 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, X } from "lucide-react";
+import { Check, Info, X } from "lucide-react";
 import { useToastStore, type Toast } from "@/store/toastStore";
 import { ProductImage } from "./ProductImage";
 
 function ToastItem({ toast }: { toast: Toast }) {
   const dismiss = useToastStore((s) => s.dismiss);
   const [paused, setPaused] = useState(false);
+  const isInfo = toast.variant === "info";
 
   useEffect(() => {
     if (paused) return;
-    const timer = setTimeout(() => dismiss(toast.id), 3200);
+    const timer = setTimeout(() => dismiss(toast.id), 3600);
     return () => clearTimeout(timer);
   }, [paused, dismiss, toast.id]);
+
+  const actionClass = "text-xs font-semibold text-brand hover:underline";
 
   return (
     <motion.div
@@ -42,24 +45,45 @@ function ToastItem({ toast }: { toast: Toast }) {
       ) : null}
 
       <div className="min-w-0 flex-1">
-        <p className="flex items-center gap-1 text-xs font-semibold text-emerald-600">
-          <Check className="h-3.5 w-3.5" aria-hidden />
+        <p
+          className={
+            isInfo
+              ? "flex items-center gap-1 text-xs font-semibold text-brand"
+              : "flex items-center gap-1 text-xs font-semibold text-emerald-600"
+          }
+        >
+          {isInfo ? (
+            <Info className="h-3.5 w-3.5" aria-hidden />
+          ) : (
+            <Check className="h-3.5 w-3.5" aria-hidden />
+          )}
           {toast.title}
         </p>
         {toast.description && (
-          <p className="truncate text-sm font-medium text-navy-ink">
+          <p className="text-sm font-medium text-navy-ink [overflow-wrap:anywhere] line-clamp-2">
             {toast.description}
           </p>
         )}
-        {toast.href && toast.actionLabel && (
+        {toast.onAction && toast.actionLabel ? (
+          <button
+            type="button"
+            onClick={() => {
+              toast.onAction?.();
+              dismiss(toast.id);
+            }}
+            className={actionClass}
+          >
+            {toast.actionLabel}
+          </button>
+        ) : toast.href && toast.actionLabel ? (
           <Link
             href={toast.href}
             onClick={() => dismiss(toast.id)}
-            className="text-xs font-semibold text-brand hover:underline"
+            className={actionClass}
           >
             {toast.actionLabel}
           </Link>
-        )}
+        ) : null}
       </div>
 
       <button
@@ -80,7 +104,7 @@ export function Toaster() {
   return (
     <div
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-4 bottom-4 z-50 flex flex-col items-center gap-2 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:items-end"
+      className="pointer-events-none fixed inset-x-4 bottom-4 z-50 flex flex-col items-center gap-2 sm:inset-x-auto sm:bottom-5 sm:right-5 sm:items-end"
     >
       <AnimatePresence initial={false}>
         {toasts.map((toast) => (

@@ -9,6 +9,9 @@ export interface Toast {
   image?: string;
   href?: string;
   actionLabel?: string;
+  /** when set, the action label renders as a button (for example Undo) */
+  onAction?: () => void;
+  variant?: "success" | "info";
 }
 
 interface ToastState {

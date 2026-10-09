@@ -1,4 +1,4 @@
-import type { CategoryOption } from "@/types/product";
+import type { Category, CategoryOption } from "@/types/product";
 
 export const PRICE_MIN = 0;
 export const PRICE_MAX = 1000;
@@ -17,3 +17,9 @@ export const SOCIAL_LINKS = [
 ];
 
 export const CART_STORAGE_KEY = "whatbytes-cart";
+
+export const CATEGORY_LABELS: Record<Category, string> = {
+  electronics: "Electronics",
+  clothing: "Clothing",
+  home: "Home",
+};

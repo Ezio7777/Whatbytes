@@ -11,13 +11,15 @@ import { useAddToCart } from "@/hooks/useAddToCart";
 interface ProductCardProps {
   product: Product;
   priority?: boolean;
+  /** always use the normal card layout, even for featured products */
+  compact?: boolean;
 }
 
-export function ProductCard({ product, priority }: ProductCardProps) {
+export function ProductCard({ product, priority, compact }: ProductCardProps) {
   const href = `/product/${product.id}`;
   const addToCart = useAddToCart();
 
-  if (product.featured) {
+  if (product.featured && !compact) {
     return (
       <article className="group flex h-full flex-col gap-4 rounded-card bg-white p-4 shadow-card transition-shadow duration-300 hover:shadow-card-hover sm:flex-row sm:p-5">
         <Link
