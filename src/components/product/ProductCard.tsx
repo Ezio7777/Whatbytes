@@ -3,11 +3,10 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
-import { AddToCartButton } from "@/components/ui/AddToCartButton";
 import { ProductImage } from "@/components/ui/ProductImage";
 import { Stars } from "@/components/ui/Stars";
 import { WishlistButton } from "@/components/wishlist/WishlistButton";
-import { useAddToCart } from "@/hooks/useAddToCart";
+import { CartControl } from "./CartControl";
 
 interface ProductCardProps {
   product: Product;
@@ -18,7 +17,6 @@ interface ProductCardProps {
 
 export function ProductCard({ product, priority, compact }: ProductCardProps) {
   const href = `/product/${product.id}`;
-  const addToCart = useAddToCart();
 
   if (product.featured && !compact) {
     return (
@@ -59,10 +57,10 @@ export function ProductCard({ product, priority, compact }: ProductCardProps) {
             <dd className="font-medium capitalize">{product.category}</dd>
           </dl>
           <div className="mt-auto flex justify-end pt-5">
-            <AddToCartButton
+            <CartControl
+              product={product}
               size="lg"
-              onAdd={() => addToCart(product)}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-[230px]"
             />
           </div>
         </div>
@@ -99,10 +97,7 @@ export function ProductCard({ product, priority, compact }: ProductCardProps) {
         <p className="mt-1 text-lg font-bold text-navy-ink">
           {formatPrice(product.price)}
         </p>
-        <AddToCartButton
-          onAdd={() => addToCart(product)}
-          className="mt-3 w-full"
-        />
+        <CartControl product={product} className="mt-3 w-full" />
       </div>
     </article>
   );

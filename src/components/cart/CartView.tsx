@@ -1,13 +1,14 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Trash2 } from "lucide-react";
 import { getCartLines } from "@/lib/cart";
 import { useHydrated } from "@/hooks/useHydrated";
 import { useCartStore } from "@/store/cartStore";
 import { useToastStore } from "@/store/toastStore";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { CartItemRow } from "./CartItemRow";
 import { OrderSummary } from "./OrderSummary";
 
@@ -61,11 +62,14 @@ export function CartView() {
   const addItem = useCartStore((s) => s.addItem);
   const pushToast = useToastStore((s) => s.push);
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   const lines = useMemo(() => getCartLines(items), [items]);
   const count = lines.reduce((sum, l) => sum + l.quantity, 0);
 
   const handleClear = () => {
     const snapshot = items;
+    setConfirmOpen(false);
     clear();
     pushToast({
       key: "clear-cart",
@@ -84,9 +88,10 @@ export function CartView() {
         {hydrated && count > 0 && (
           <button
             type="button"
-            onClick={handleClear}
-            className="text-sm font-medium text-navy-ink/60 hover:text-red-600"
+            onClick={() => setConfirmOpen(true)}
+            className="inline-flex h-10 items-center gap-2 rounded-lg border border-red-200 bg-white px-4 text-sm font-semibold text-red-600 shadow-sm transition-all hover:border-red-300 hover:bg-red-50 active:scale-[0.97]"
           >
+            <Trash2 className="h-4 w-4" aria-hidden />
             Clear cart
           </button>
         )}
@@ -96,6 +101,16 @@ export function CartView() {
           {count} {count === 1 ? "item" : "items"} in your cart
         </p>
       )}
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Clear your cart?"
+        description={`This will remove all ${count} ${count === 1 ? "item" : "items"} from your cart.`}
+        confirmLabel="Yes, clear cart"
+        cancelLabel="Keep items"
+        onConfirm={handleClear}
+        onCancel={() => setConfirmOpen(false)}
+      />
 
       <div className="mt-6">
         {!hydrated ? (

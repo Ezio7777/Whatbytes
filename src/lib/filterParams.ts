@@ -1,4 +1,5 @@
 import type { Category } from "@/types/product";
+import { BRAND_SLUGS } from "./brands";
 import { PRICE_MAX, PRICE_MIN } from "./constants";
 
 export type PriceRange = [number, number];
@@ -7,6 +8,7 @@ export type SortKey = "featured" | "price-asc" | "price-desc" | "rating";
 export interface FilterValues {
   category: Category | "all";
   priceRange: PriceRange;
+  brands: string[];
   query: string;
   sort: SortKey;
 }
@@ -16,6 +18,7 @@ export const DEFAULT_PRICE_RANGE: PriceRange = [PRICE_MIN, PRICE_MAX];
 export const DEFAULT_FILTERS: FilterValues = {
   category: "all",
   priceRange: DEFAULT_PRICE_RANGE,
+  brands: [],
   query: "",
   sort: "featured",
 };
@@ -53,7 +56,12 @@ export function parseFilters(params: ParamReader): FilterValues {
     ? (rawSort as SortKey)
     : "featured";
 
-  return { category, priceRange, query: params.get("q") ?? "", sort };
+  const requested = (params.get("brand") ?? "")
+    .split(",")
+    .map((slug) => slug.trim().toLowerCase());
+  const brands = BRAND_SLUGS.filter((slug) => requested.includes(slug));
+
+  return { category, priceRange, brands, query: params.get("q") ?? "", sort };
 }
 
 /** merges a patch into the current filters and returns a clean query string */
@@ -71,8 +79,10 @@ export function buildQueryString(
   ) {
     params.set("price", `${next.priceRange[0]}-${next.priceRange[1]}`);
   }
+  if (next.brands.length > 0) params.set("brand", next.brands.join(","));
   if (next.query.trim()) params.set("q", next.query.trim());
   if (next.sort !== "featured") params.set("sort", next.sort);
 
-  return params.toString();
+  // keep commas readable in the address bar, e.g. brand=sonic,pulse
+  return params.toString().replace(/%2C/gi, ",");
 }

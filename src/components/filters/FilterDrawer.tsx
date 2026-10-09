@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import { X } from "lucide-react";
+import { useHydrated } from "@/hooks/useHydrated";
 import { FilterPanel } from "./FilterPanel";
 
 interface FilterDrawerProps {
@@ -13,6 +15,7 @@ interface FilterDrawerProps {
 
 export function FilterDrawer({ open, onClose, resultCount }: FilterDrawerProps) {
   const controls = useDragControls();
+  const hydrated = useHydrated();
 
   useEffect(() => {
     if (!open) return;
@@ -28,7 +31,9 @@ export function FilterDrawer({ open, onClose, resultCount }: FilterDrawerProps) 
     };
   }, [open, onClose]);
 
-  return (
+  if (!hydrated) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <div
@@ -93,6 +98,7 @@ export function FilterDrawer({ open, onClose, resultCount }: FilterDrawerProps) 
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

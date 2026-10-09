@@ -10,10 +10,10 @@ A responsive e-commerce storefront built for the Whatbytes frontend assignment. 
 
 **Product listing (`/`)**
 - Responsive grid: 3 columns on desktop, 2 on tablet, 1 on mobile
-- Category filter and dual handle price range slider
+- Category filter, dual handle price range slider and multi-select brand checkboxes
 - Search with string matching (debounced)
 - Sort by price and rating
-- Filters stored in the URL, for example `/?category=electronics&price=0-1000&q=phone&sort=price-desc`
+- Filters stored in the URL, for example `/?category=electronics&price=0-1000&brand=sonic,pulse&q=phone&sort=price-desc`
 - Empty state when nothing matches
 - Mobile filter bottom sheet with drag to close
 
@@ -30,6 +30,7 @@ A responsive e-commerce storefront built for the Whatbytes frontend assignment. 
 - Cart saved in localStorage and synced between tabs
 
 **Extras**
+- Header with search, wishlist button, cart button with badge and a profile avatar menu
 - Wishlist (`/wishlist`) saved in localStorage
 - Toast notifications, animated cart badge, page transitions
 - Loading skeletons, custom 404 and error pages

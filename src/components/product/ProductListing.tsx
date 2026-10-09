@@ -10,15 +10,16 @@ import { EmptyState } from "./EmptyState";
 import { SortSelect } from "./SortSelect";
 
 export function ProductListing({ products }: { products: Product[] }) {
-  const { category, priceRange, query, sort, setSort, reset } = useUrlFilters();
+  const { category, priceRange, brands, query, sort, setSort, reset } =
+    useUrlFilters();
 
   const visible = useMemo(
     () =>
       sortProducts(
-        filterProducts(products, { category, priceRange, query }),
+        filterProducts(products, { category, priceRange, brands, query }),
         sort
       ),
-    [products, category, priceRange, query, sort]
+    [products, category, priceRange, brands, query, sort]
   );
 
   return (

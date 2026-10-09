@@ -38,7 +38,7 @@ export function FilterSidebar({ resultCount }: { resultCount: number }) {
 
       {/* desktop: sticky sidebar */}
       <aside className="hidden lg:block">
-        <div className="sticky top-24">
+        <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-card">
           <FilterPanel />
         </div>
       </aside>

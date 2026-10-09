@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { BRAND_SLUGS, brandsForCategory } from "@/lib/brands";
 import {
   DEFAULT_FILTERS,
   buildQueryString,
@@ -38,13 +39,26 @@ export function useUrlFilters() {
     filters.priceRange[1] !== DEFAULT_FILTERS.priceRange[1]
       ? 1
       : 0) +
+    (filters.brands.length > 0 ? 1 : 0) +
     (filters.query.trim() ? 1 : 0);
 
   return {
     ...filters,
     activeCount,
-    setCategory: (category: FilterValues["category"]) =>
-      apply({ category }, "push"),
+    setCategory: (category: FilterValues["category"]) => {
+      // drop selected brands that do not exist in the new category
+      const allowed = brandsForCategory(category).map((b) => b.slug);
+      apply(
+        { category, brands: filters.brands.filter((b) => allowed.includes(b)) },
+        "push"
+      );
+    },
+    toggleBrand: (slug: string) =>
+      apply({
+        brands: BRAND_SLUGS.filter((s) =>
+          s === slug ? !filters.brands.includes(slug) : filters.brands.includes(s)
+        ),
+      }),
     setPriceRange: (priceRange: FilterValues["priceRange"]) =>
       apply({ priceRange }),
     setQuery: (query: string) => apply({ query }),
@@ -54,6 +68,7 @@ export function useUrlFilters() {
         {
           category: DEFAULT_FILTERS.category,
           priceRange: DEFAULT_FILTERS.priceRange,
+          brands: [],
           query: "",
         },
         "push"

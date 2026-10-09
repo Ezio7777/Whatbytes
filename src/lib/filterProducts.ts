@@ -1,9 +1,11 @@
+import { brandSlug } from "@/lib/brands";
 import type { SortKey } from "@/lib/filterParams";
 import type { Category, Product } from "@/types/product";
 
 export interface ProductFilters {
   category: Category | "all";
   priceRange: [number, number];
+  brands: string[];
   query: string;
 }
 
@@ -16,6 +18,12 @@ export function filterProducts(products: Product[], filters: ProductFilters) {
       return false;
     }
     if (product.price < min || product.price > max) {
+      return false;
+    }
+    if (
+      filters.brands.length > 0 &&
+      !filters.brands.includes(brandSlug(product.brand))
+    ) {
       return false;
     }
     if (tokens.length > 0) {

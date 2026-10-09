@@ -4,15 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useCartCount } from "@/hooks/useCartCount";
+import { useWishlistCount } from "@/hooks/useWishlistCount";
 import { useUrlFilters } from "@/hooks/useUrlFilters";
 import { Logo } from "./Logo";
 import { SearchBar } from "./SearchBar";
 import { CartButton } from "./CartButton";
+import { WishlistLink } from "./WishlistLink";
+import { ProfileMenu } from "./ProfileMenu";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { query, setQuery } = useUrlFilters();
   const cartCount = useCartCount();
+  const wishlistCount = useWishlistCount();
 
   // typing updates the URL after a short pause, URL changes flow back here
   const [value, setValue] = useState(query);
@@ -56,8 +60,10 @@ export function Header() {
           <SearchBar value={value} onChange={setValue} />
         </div>
 
-        <div className="justify-self-end md:col-start-3 md:row-start-1">
+        <div className="flex items-center gap-2.5 justify-self-end sm:gap-3 md:col-start-3 md:row-start-1">
+          <WishlistLink count={wishlistCount} />
           <CartButton count={cartCount} />
+          <ProfileMenu cartCount={cartCount} wishlistCount={wishlistCount} />
         </div>
       </div>
     </header>

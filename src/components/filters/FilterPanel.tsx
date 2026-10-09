@@ -2,6 +2,7 @@
 
 import { RotateCcw } from "lucide-react";
 import { useUrlFilters } from "@/hooks/useUrlFilters";
+import { BrandFilter } from "./BrandFilter";
 import { CategoryFilter } from "./CategoryFilter";
 import { PriceRangeSlider } from "./PriceRangeSlider";
 
@@ -27,6 +28,7 @@ export function FilterPanel() {
       <div className="mt-5 space-y-7">
         <CategoryFilter />
         <PriceRangeSlider />
+        <BrandFilter />
       </div>
     </div>
   );
