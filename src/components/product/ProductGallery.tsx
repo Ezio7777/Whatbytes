@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,6 +10,8 @@ import { ProductImage } from "@/components/ui/ProductImage";
 interface ProductGalleryProps {
   images: string[];
   title: string;
+  /** floating control shown on the top right of the main image */
+  overlay?: ReactNode;
 }
 
 const variants = {
@@ -17,7 +20,7 @@ const variants = {
   exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0 }),
 };
 
-export function ProductGallery({ images, title }: ProductGalleryProps) {
+export function ProductGallery({ images, title, overlay }: ProductGalleryProps) {
   const [[index, direction], setPage] = useState<[number, number]>([0, 0]);
   const hasMany = images.length > 1;
 
@@ -68,6 +71,8 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
             />
           </motion.div>
         </AnimatePresence>
+
+        {overlay && <div className="absolute right-3 top-3 z-10">{overlay}</div>}
 
         {hasMany && (
           <>

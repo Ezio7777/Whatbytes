@@ -6,6 +6,7 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductDetails } from "@/components/product/ProductDetails";
 import { ReviewsSection } from "@/components/product/ReviewsSection";
 import { RelatedProducts } from "@/components/product/RelatedProducts";
+import { WishlistButton } from "@/components/wishlist/WishlistButton";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -51,7 +52,11 @@ export default async function ProductPage({ params }: PageProps) {
       <Breadcrumb product={product} />
 
       <article className="mt-4 grid gap-6 rounded-card bg-white p-4 shadow-card md:p-6 lg:grid-cols-2 lg:gap-12 lg:p-8">
-        <ProductGallery images={product.gallery} title={product.title} />
+        <ProductGallery
+          images={product.gallery}
+          title={product.title}
+          overlay={<WishlistButton product={product} />}
+        />
         <ProductDetails product={product} />
       </article>
 

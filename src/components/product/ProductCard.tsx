@@ -1,11 +1,12 @@
 "use client";
 
-import { ProductImage } from "@/components/ui/ProductImage";
 import Link from "next/link";
-import { cn, formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/types/product";
 import { AddToCartButton } from "@/components/ui/AddToCartButton";
+import { ProductImage } from "@/components/ui/ProductImage";
 import { Stars } from "@/components/ui/Stars";
+import { WishlistButton } from "@/components/wishlist/WishlistButton";
 import { useAddToCart } from "@/hooks/useAddToCart";
 
 interface ProductCardProps {
@@ -22,19 +23,23 @@ export function ProductCard({ product, priority, compact }: ProductCardProps) {
   if (product.featured && !compact) {
     return (
       <article className="group flex h-full flex-col gap-4 rounded-card bg-white p-4 shadow-card transition-shadow duration-300 hover:shadow-card-hover sm:flex-row sm:p-5">
-        <Link
-          href={href}
-          className="relative block aspect-[4/3] w-full shrink-0 overflow-hidden rounded-lg bg-brand-soft sm:aspect-auto sm:min-h-[260px] sm:w-[42%]"
-        >
-          <ProductImage
-            src={product.image}
-            alt={product.title}
-            fill
-            sizes="(min-width: 1024px) 220px, (min-width: 640px) 40vw, 100vw"
-            priority={priority}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </Link>
+        <div className="relative aspect-[4/3] w-full shrink-0 sm:aspect-auto sm:min-h-[260px] sm:w-[42%]">
+          <Link
+            href={href}
+            aria-label={`View ${product.title}`}
+            className="absolute inset-0 block overflow-hidden rounded-lg bg-brand-soft"
+          >
+            <ProductImage
+              src={product.image}
+              alt={product.title}
+              fill
+              sizes="(min-width: 1024px) 220px, (min-width: 640px) 40vw, 100vw"
+              priority={priority}
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </Link>
+          <WishlistButton product={product} className="absolute right-2 top-2" />
+        </div>
 
         <div className="flex flex-1 flex-col">
           <Link href={href} className="w-fit">
@@ -67,19 +72,23 @@ export function ProductCard({ product, priority, compact }: ProductCardProps) {
 
   return (
     <article className="group flex h-full flex-col rounded-card bg-white p-3 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover">
-      <Link
-        href={href}
-        className="relative block aspect-[4/3] w-full overflow-hidden rounded-lg bg-brand-soft"
-      >
-        <ProductImage
-          src={product.image}
-          alt={product.title}
-          fill
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 100vw"
-          priority={priority}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      </Link>
+      <div className="relative aspect-[4/3] w-full">
+        <Link
+          href={href}
+          aria-label={`View ${product.title}`}
+          className="absolute inset-0 block overflow-hidden rounded-lg bg-brand-soft"
+        >
+          <ProductImage
+            src={product.image}
+            alt={product.title}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 45vw, 100vw"
+            priority={priority}
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </Link>
+        <WishlistButton product={product} className="absolute right-2 top-2" />
+      </div>
 
       <div className="mt-3 flex flex-1 flex-col">
         <Link href={href} className="w-fit">

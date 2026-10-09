@@ -8,9 +8,11 @@ import { ProductCard } from "./ProductCard";
 interface ProductGridProps {
   products: Product[];
   className?: string;
+  /** use the normal card layout for every product (no wide featured card) */
+  compact?: boolean;
 }
 
-export function ProductGrid({ products, className }: ProductGridProps) {
+export function ProductGrid({ products, className, compact }: ProductGridProps) {
   return (
     <ul
       className={cn(
@@ -31,9 +33,9 @@ export function ProductGrid({ products, className }: ProductGridProps) {
               ease: "easeOut",
               delay: Math.min(index, 8) * 0.04,
             }}
-            className={product.featured ? "sm:col-span-2" : undefined}
+            className={product.featured && !compact ? "sm:col-span-2" : undefined}
           >
-            <ProductCard product={product} priority={index < 3} />
+            <ProductCard product={product} priority={index < 3} compact={compact} />
           </motion.li>
         ))}
       </AnimatePresence>

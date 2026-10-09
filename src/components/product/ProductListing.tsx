@@ -23,7 +23,7 @@ export function ProductListing({ products }: { products: Product[] }) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8">
-      <FilterSidebar />
+      <FilterSidebar resultCount={visible.length} />
 
       <section aria-labelledby="listing-title">
         <h1

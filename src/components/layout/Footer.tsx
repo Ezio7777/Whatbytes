@@ -42,6 +42,9 @@ export function Footer() {
               <Link href="/" className={linkClass}>
                 Contact
               </Link>
+              <Link href="/wishlist" className={linkClass}>
+                Wishlist
+              </Link>
             </div>
           </div>
 

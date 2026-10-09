@@ -17,6 +17,7 @@ export const SOCIAL_LINKS = [
 ];
 
 export const CART_STORAGE_KEY = "whatbytes-cart";
+export const WISHLIST_STORAGE_KEY = "whatbytes-wishlist";
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   electronics: "Electronics",
